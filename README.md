@@ -34,15 +34,14 @@
  **فهرست :**
  ----------------------
  
-**دسترسی سریع به اسکریپت** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%85%D9%86)**
-- **امکانات** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel/tree/main#%D8%A7%D9%85%DA%A9%D8%A7%D9%86%D8%A7%D8%AA)**
+**دسترسی سریع به اسکریپت** >> **[کلیک]()**
+- **امکانات** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D9%85%DA%A9%D8%A7%D9%86%D8%A7%D8%AA)**
 - **تک سرور** : 
-- **تانل KCP TCP تک کانفیگ** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel/tree/main#%D8%AA%D8%A7%D9%86%D9%84-kcp-tcp-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
--  **تانل KCP + ICMP تک کانفیگ** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel/tree/main#%D8%AA%D8%A7%D9%86%D9%84-kcp--icmp-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
--  **تانل KCP TCP مولتی کانفیگ (1 یا چند سرور خارج)** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel/tree/main#%D8%AA%D8%A7%D9%86%D9%84-kcp-tcp-%D9%85%D9%88%D9%84%D8%AA%DB%8C-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
-- **تانل KCP + ICMP مولتی کانفیگ** >>  **[کلیک](https://github.com/Azumi67/KCP_tunnel/tree/main#%D8%AA%D8%A7%D9%86%D9%84-kcp--icmp-%D9%85%D9%88%D9%84%D8%AA%DB%8C-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
-- **تانل KCP + PrivateIP کانفیگ** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel#%D8%AA%D8%A7%D9%86%D9%84-kcp--privateip-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
-- **اسکریپت های کارآمد** >> **[کلیک](https://github.com/Azumi67/KCP_tunnel#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%87%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%D8%A2%D9%85%D8%AF-)**
+- **تانل UDP2RAW FEC IPV4** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
+- **تانل UDP2RAW FEC IPV6** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF-1)**
+- **تانل UDP2RAW FEC ICMP** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-icmp-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
+- **تانل UDP2RAW FEC + PrivateIP** >>  **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec--privateip)**
+- **اسکریپت های کارآمد** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%87%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%D8%A2%D9%85%D8%AF-)**
 
 --------------
  
@@ -87,7 +86,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 **آموزش**
 -
 ![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC IPV4 تک کانفیگ**
+**تانل UDP2RAW FEC IPV4**
 ----------------------------------
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
@@ -140,7 +139,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 
 --------------------------------------
 ![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC IPV4 تک کانفیگ**
+**تانل UDP2RAW FEC IPV6**
 -
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
@@ -181,7 +180,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 - در آخر ایپی سرور ایران شما با پورت نهایی برای وایرگارد نمایش داده میشود.
 --------------------------------------
 ![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC ICMP تک کانفیگ**
+**تانل UDP2RAW FEC ICMP**
 ----------------------------------
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
