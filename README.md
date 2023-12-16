@@ -36,7 +36,7 @@
  
 **دسترسی سریع به اسکریپت** >> **[کلیک]()**
 - **امکانات** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D9%85%DA%A9%D8%A7%D9%86%D8%A7%D8%AA)**
-- 
+
 **آموزش** : 
 - **تانل UDP2RAW FEC IPV4** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
 - **تانل UDP2RAW FEC IPV6** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF-1)**
