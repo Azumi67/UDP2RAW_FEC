@@ -261,7 +261,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 
 
  <p align="right">
-  <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/79fc3b6b-3391-4c1f-801d-881e6d6e3a9" alt="Image" />
+  <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/c63dd725-e309-4e48-b14d-f34c497aa049" alt="Image" />
 </p>
 
 **قبل از کانفیگ ، اطمینان پیدا کنید که تانل 6to4 یا تانل های دیگری ندارید که خطای بافر سایز نگیرید**
