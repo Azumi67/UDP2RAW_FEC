@@ -19,7 +19,32 @@
 - در آخر هر کانفیگ، ایپی 4 سرور ایران شما با پورت نهایی نمایش داده میشود.
 - من در وقت آزاد این را درست کردم و ممکن است اشتباهاتی هم داخلش باشد. پیشاپیش ببخشید.
 --------------
+![Go_(programming_language)-Logo wine](https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/71b80a34-9515-42de-8238-9065986104a1)**اموزش نصب go مورد نیاز برای اجرای اسکریپت**
 
+- شما میتوانید از طریق اسکریپت، این پیش نیاز را نصب کنید یا به صورت دستی نصب نمایید.
+```
+sudo apt update
+arm64 : wget https://go.dev/dl/go1.21.5.linux-arm64.tar.gz
+arm64 : sudo tar -C /usr/local -xzf go1.21.5.linux-arm64.tar.gz
+
+amd64 : wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
+amd64 : sudo tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz
+
+nano ~/.bash_profile
+paste this into it : export PATH=$PATH:/usr/local/go/bin
+save and exit with Ctrl + x , then Y
+
+source ~/.bash_profile
+go mod init mymodule
+go mod tidy
+go get github.com/AlecAivazis/survey/v2
+go get github.com/fatih/color
+
+```
+- سپس اسکریپت را میتوانید اجرا نمایید.
+
+
+--------------
 ![Exclamation-Mark-PNG-Clipart](https://github.com/Azumi67/Game_tunnel/assets/119934376/3951d7d9-0e17-4723-b07f-786500ccbc7f)**چند نکته**
 
 - برای تانل ICMP ، حتما اگر اشتباهی در کانفیگ انجام دادید باید حتما هم در سرور ایران و خارج حذفش کنید و هر دو سرور ریبوت شود در غیر این صورت خطای SERVER IS FULL را میگیرید.
