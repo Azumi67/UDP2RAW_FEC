@@ -21,7 +21,7 @@
 --------------
 ![Go_(programming_language)-Logo wine](https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/71b80a34-9515-42de-8238-9065986104a1)**اموزش نصب go مورد نیاز برای اجرای اسکریپت**
 
-- شما میتوانید از طریق اسکریپت، این پیش نیاز را نصب کنید یا به صورت دستی نصب نمایید.
+- شما میتوانید از طریق اسکریپت [Here](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%85%D9%86) ، این پیش نیاز را نصب کنید یا به صورت دستی نصب نمایید.
 - لطفا پس از نصب پیش نیاز ، برای اجرای اسکریپت go برای بار اول، ممکن تا 10 ثانیه طول بکشد اما بعد از آن سریع اجرا میشود.
 ```
 sudo apt update
@@ -346,22 +346,17 @@ wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-opti
 **اسکریپت من**
 ----------------
 
+- دستور زیر فایل های پیش نیاز را نصب میکند و سپس اقدام به اجرای اسکریپت میکند. اگر مشکلی داشتید به صورت دستی همی میتوانید نصب کنید
+```
+sudo apt install curl -y && bash <(curl -s https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/go.sh)
 ```
 
+- اگر به صورت دستی نصب کردید و پیش نیاز ها را هم دارید و میخواهید به صورت دستی هم اسکریپت را اجرا کنید میتوانید با دستور زیر اینکار را انجام دهید
+
+  
 ```
-
-- اپدیت میشود
-
+sudo apt install wget -y && wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go && go run udpfec.go
 ```
-
-```
-
- <div dir="rtl">&bull;  دستور زیر برای کسانی هست که پیش نیاز ها را در سرور، نصب شده دارند</div>
- 
-```
-
-```
-
 ---------------------------------------------
 ![R (7)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/42c09cbb-2690-4343-963a-5deca12218c1)
 **تلگرام** 
