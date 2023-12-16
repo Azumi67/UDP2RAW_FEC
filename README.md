@@ -1,5 +1,3 @@
-**به زودی اپدیت میشود**
-
 ![R (2)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/a064577c-9302-4f43-b3bf-3d4f84245a6f)
 نام پروژه : تانل UDP2RAW + FEC[UDPSPEED] برای وایرگارد
 ---------------------------------------------------------------
@@ -346,7 +344,7 @@ wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-opti
 **اسکریپت من**
 ----------------
 
-- دستور زیر فایل های پیش نیاز را نصب میکند و سپس اقدام به اجرای اسکریپت میکند. اگر مشکلی داشتید به صورت دستی همی میتوانید نصب کنید
+- دستور زیر فایل های پیش نیاز را نصب میکند و سپس اقدام به اجرای اسکریپت میکند. اگر مشکلی داشتید به صورت دستی هم میتوانید نصب کنید
 ```
 sudo apt install curl -y && bash <(curl -s https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/go.sh)
 ```
@@ -368,6 +366,8 @@ sudo apt install wget -y && wget https://raw.githubusercontent.com/Azumi67/UDP2R
 
 
 
+
+![R (9)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/33388f7b-f1ab-4847-9e9b-e8b39d75deaa) [سورس  UDP2RAW](https://github.com/wangyu-/udp2raw)
 
 ![R (9)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/33388f7b-f1ab-4847-9e9b-e8b39d75deaa) [سورس  OPIRAN](https://github.com/opiran-club)
 
