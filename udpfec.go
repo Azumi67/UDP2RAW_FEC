@@ -530,9 +530,9 @@ func udp2rawip6() {
 	}
 
 	switch choice {
-	case "1. \033[92mKharej\033[0m":
+	case "1. \033[93mKharej\033[0m":
 		kharejip6()
-	case "2. \033[93mIRAN \033[0m":
+	case "2. \033[92mIRAN \033[0m":
 		iranip6()
 	case "0. \033[94mBack to the previous menu\033[0m":
 	    clearScreen()
@@ -549,6 +549,12 @@ func kharejip6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
+		downl("udp2raw")
+		downl("udpspeed")
+	} else {
+		fmt.Println("\033[93mSkipping download..\033[0m")
+	}
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	reader := bufio.NewReader(os.Stdin)
@@ -615,6 +621,12 @@ func iranip6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
+		downl("udp2raw")
+		downl("udpspeed")
+	} else {
+		fmt.Println("\033[93mSkipping download..\033[0m")
+	}
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	var clientIP, portTunnel, password, wireguardPort, rawMode string
@@ -1534,6 +1546,12 @@ func kharej6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
+		downl("udp2raw")
+		downl("udpspeed")
+	} else {
+		fmt.Println("\033[93mSkipping download..\033[0m")
+	}
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	reader := bufio.NewReader(os.Stdin)
@@ -1617,6 +1635,12 @@ func iran6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
+		downl("udp2raw")
+		downl("udpspeed")
+	} else {
+		fmt.Println("\033[93mSkipping download..\033[0m")
+	}
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
