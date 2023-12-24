@@ -1353,7 +1353,7 @@ func kharejSingle() {
 		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --fix-latency -r127.0.0.1:%s -f20:10 -k %s",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
 				portFEC, wireguardPort, password),
 		}
 		err = createService(azumifecData)
@@ -1485,7 +1485,7 @@ func iranSingle() {
 
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --fix-latency -f20:10 -k \"%s\"",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
@@ -1617,7 +1617,7 @@ func kharej6() {
 		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s -r127.0.0.1:%s --fix-latency -f20:10 -k %s",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k %s",
 				portFEC, wireguardPort, password),
 		}
 		err = createService(azumifecData)
@@ -1748,7 +1748,7 @@ func iran6() {
 
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --fix-latency -f20:10 -k \"%s\"",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
@@ -2602,7 +2602,7 @@ func kharejIcmp() {
 		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --fix-latency -r127.0.0.1:%s -f20:10 -k %s",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
 				portFEC, wireguardPort, password),
 		}
 		err = createService(azumifecData)
@@ -2730,7 +2730,7 @@ func iranIcmp() {
 
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --fix-latency -f20:10 -k \"%s\"",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
@@ -3371,7 +3371,7 @@ func kharejPri() {
 		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s --fix-latency -r127.0.0.1:%s -f20:10 -k %s",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
 				portFEC, wireguardPort, password),
 		}
 		err = createService(azumifecData)
@@ -3510,7 +3510,7 @@ func iranPri() {
 
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
-			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --fix-latency -f20:10 -k \"%s\"",
+			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
