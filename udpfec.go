@@ -3540,7 +3540,8 @@ Description=` + data.ServiceName + ` Service
 [Service]
 ExecStart=` + data.Command + `
 Restart=always
-RestartSec=10
+RestartSec=5
+LimitNOFILE=1048576
 
 [Install]
 WantedBy=multi-user.target
