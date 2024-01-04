@@ -2101,6 +2101,9 @@ func removeIpSingle() {
         deleteCron()
 	removeIPIP6()
 	removeSingle()
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
+	}
 
 	fmt.Print("Progress: ")
 
@@ -2130,6 +2133,9 @@ func removeICMPSingle() {
         removeICMP()
 	resetICMP()
 	removeSingle()
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
+	}
     
 	fmt.Print("Progress: ")
 
@@ -2158,6 +2164,9 @@ func removeSingle() {
         deleteCron()
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
+	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
 	}
 
 	azumiServices := []string{
@@ -2244,6 +2253,9 @@ func removeSingle1() {
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
+	}
 
 	azumiServices := []string{
 		"azumiudp_iran-1", "azumifec_iran-1", "azumifec_kharej1", "azumiudp_kharej1",
@@ -2285,6 +2297,9 @@ func removeSingle2() {
         deleteCron()
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
+	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
 	}
 
 	azumiServices := []string{
@@ -2329,6 +2344,9 @@ func removeSingle3() {
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
+	}
 
 	azumiServices := []string{
 		"azumiudp_iran-3", "azumifec_iran-3", "azumifec_kharej3", "azumiudp_kharej3",
@@ -2371,6 +2389,9 @@ func removeSingle4() {
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
+	}
 
 	azumiServices := []string{
 		"azumiudp_iran-4", "azumifec_iran-4", "azumifec_kharej4", "azumiudp_kharej4",
@@ -2412,6 +2433,9 @@ func removeSingle5() {
 
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
+	}
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.RemoveAll("/etc/udp.sh")
 	}
 
 	azumiServices := []string{
