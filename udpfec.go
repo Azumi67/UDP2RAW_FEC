@@ -245,6 +245,242 @@ func mainMenu() {
 		readInput()
 	}
 }
+func deleteCron() {
+	entriesToDelete := []string{
+		"0 */1 * * * /etc/udp.sh",
+		"0 */2 * * * /etc/udp.sh",
+		"0 */3 * * * /etc/udp.sh",
+		"0 */4 * * * /etc/udp.sh",
+		"0 */5 * * * /etc/udp.sh",
+		"0 */6 * * * /etc/udp.sh",
+		"0 */7 * * * /etc/udp.sh",
+		"0 */8 * * * /etc/udp.sh",
+		"0 */9 * * * /etc/udp.sh",
+		"0 */10 * * * /etc/udp.sh",
+		"0 */11 * * * /etc/udp.sh",
+		"0 */12 * * * /etc/udp.sh",
+		"0 */13 * * * /etc/udp.sh",
+		"0 */14 * * * /etc/udp.sh",
+		"0 */15 * * * /etc/udp.sh",
+		"0 */16 * * * /etc/udp.sh",
+		"0 */17 * * * /etc/udp.sh",
+		"0 */18 * * * /etc/udp.sh",
+		"0 */19 * * * /etc/udp.sh",
+		"0 */20 * * * /etc/udp.sh",
+		"0 */21 * * * /etc/udp.sh",
+		"0 */22 * * * /etc/udp.sh",
+		"0 */23 * * * /etc/udp.sh",
+		"0 */24 * * * /etc/udp.sh",
+	}
+
+	existingCrontab, err := exec.Command("crontab", "-l").Output()
+	if err != nil {
+		displayError("\033[91mNo existing cron found!\033[0m")
+		return
+	}
+
+	newCrontab := string(existingCrontab)
+	for _, entry := range entriesToDelete {
+		if strings.Contains(newCrontab, entry) {
+			newCrontab = strings.Replace(newCrontab, entry, "", -1)
+		}
+	}
+
+	if newCrontab != string(existingCrontab) {
+		cmd := exec.Command("crontab")
+		cmd.Stdin = strings.NewReader(newCrontab)
+		if err := cmd.Run(); err != nil {
+			log.Fatal(err)
+		}
+		displayNotification("\033[92mDeleting Previous Crons..\033[0m")
+	} else {
+		displayError("\033[91mNothing Found, moving on..!\033[0m")
+	}
+}
+
+const (
+	crontabFilePath = "/var/spool/cron/crontabs/root"
+	azumiudpKharej  = "azumiudp_kharej"
+	azumifecKharej  = "azumifec_kharej"
+	azumiudpIran    = "azumiudp_iran"
+	azumifecIran    = "azumifec_iran"
+)
+
+func resKharej() {
+	deleteCron()
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.Remove("/etc/udp.sh")
+	}
+
+	file, err := os.Create("/etc/udp.sh")
+	if err != nil {
+		log.Fatalf("\033[91mbash creation error:\033[0m %v", err)
+	}
+	defer file.Close()
+
+	file.WriteString("#!/bin/bash\n")
+	file.WriteString("sudo systemctl daemon-reload\n")
+	file.WriteString("sudo sync; echo 1 > /proc/sys/vm/drop_caches\n")
+	file.WriteString("sudo journalctl --vacuum-size=1M\n")
+
+	cmd := exec.Command("chmod", "+x", "/etc/udp.sh")
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("\033[91mchmod cmd error:\033[0m %v", err)
+	}
+
+	fmt.Println("╭──────────────────────────────────────╮")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [2 Hours Reset Timer]\033[93m: \033[0m")
+	configCountStr, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
+	}
+	configCountStr = strings.TrimSpace(configCountStr)
+	fmt.Println("╰──────────────────────────────────────╯")
+
+	configCount, err := strconv.Atoi(configCountStr)
+	if err != nil {
+		log.Fatalf("\033[91minvalid input for Configs number:\033[0m %v", err)
+	}
+
+	hours := configCount * 2
+
+	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+
+	crontabFile, err := os.OpenFile(crontabFilePath, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		log.Fatalf("\033[91mCouldn't open Cron:\033[0m %v", err)
+	}
+	defer crontabFile.Close()
+
+	var crontabContent strings.Builder
+	scanner := bufio.NewScanner(crontabFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line == cronEntry {
+			fmt.Println("\033[92mOh .. Cron entry already exists!\033[0m")
+			return
+		}
+		crontabContent.WriteString(line)
+		crontabContent.WriteString("\n")
+	}
+
+	for i := 1; i <= configCount; i++ {
+		configAzumiudp := fmt.Sprintf("%s%d", azumiudpKharej, i)
+		configAzumifec := fmt.Sprintf("%s%d", azumifecKharej, i)
+		file.WriteString(fmt.Sprintf("sudo systemctl restart %s\n", configAzumiudp))
+		file.WriteString(fmt.Sprintf("sudo systemctl restart %s\n", configAzumifec))
+	}
+
+	crontabContent.WriteString(cronEntry)
+	crontabContent.WriteString("\n")
+
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("\033[91mcrontab Reading error:\033[0m %v", err)
+	}
+
+	if err := crontabFile.Truncate(0); err != nil {
+		log.Fatalf("\033[91mcouldn't truncate cron file:\033[0m %v", err)
+	}
+
+	if _, err := crontabFile.Seek(0, 0); err != nil {
+		log.Fatalf("\033[91mcouldn't find cron file: \033[0m%v", err)
+	}
+
+	if _, err := crontabFile.WriteString(crontabContent.String()); err != nil {
+		log.Fatalf("\033[91mCouldn't write cron file:\033[0m %v", err)
+	}
+
+	fmt.Println("\033[92mCron entry added successfully!\033[0m")
+}
+func resIran() {
+	deleteCron()
+	if _, err := os.Stat("/etc/udp.sh"); err == nil {
+		os.Remove("/etc/udp.sh")
+	}
+
+	file, err := os.Create("/etc/udp.sh")
+	if err != nil {
+		log.Fatalf("\033[91mbash creation error:\033[0m %v", err)
+	}
+	defer file.Close()
+
+	file.WriteString("#!/bin/bash\n")
+	file.WriteString("sudo systemctl daemon-reload\n")
+	file.WriteString("sudo sync; echo 1 > /proc/sys/vm/drop_caches\n")
+	file.WriteString("sudo journalctl --vacuum-size=1M\n")
+
+	cmd := exec.Command("chmod", "+x", "/etc/udp.sh")
+	if err := cmd.Run(); err != nil {
+		log.Fatalf("\033[91mchmod cmd error:\033[0m %v", err)
+	}
+
+	fmt.Println("╭──────────────────────────────────────╮")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [2 Hours Reset Timer]\033[93m: \033[0m")
+	configCountStr, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
+	}
+	configCountStr = strings.TrimSpace(configCountStr)
+	fmt.Println("╰──────────────────────────────────────╯")
+
+	configCount, err := strconv.Atoi(configCountStr)
+	if err != nil {
+		log.Fatalf("\033[91mInvalid input for Configs number:\033[0m %v", err)
+	}
+
+	hours := configCount * 2
+
+	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+
+	crontabFile, err := os.OpenFile(crontabFilePath, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		log.Fatalf("\033[91mCouldn't open Cron:\033[0m %v", err)
+	}
+	defer crontabFile.Close()
+
+	var crontabContent strings.Builder
+	scanner := bufio.NewScanner(crontabFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line == cronEntry {
+			fmt.Println("\033[92mOh .. Cron entry already exists!\033[0m")
+			return
+		}
+		crontabContent.WriteString(line)
+		crontabContent.WriteString("\n")
+	}
+
+	for i := 1; i <= configCount; i++ {
+		configAzumiudp := fmt.Sprintf("%s-%d", azumiudpIran, i)
+		configAzumifec := fmt.Sprintf("%s-%d", azumifecIran, i)
+		file.WriteString(fmt.Sprintf("sudo systemctl restart %s\n", configAzumiudp))
+		file.WriteString(fmt.Sprintf("sudo systemctl restart %s\n", configAzumifec))
+	}
+
+	crontabContent.WriteString(cronEntry)
+	crontabContent.WriteString("\n")
+
+	if err := scanner.Err(); err != nil {
+		log.Fatalf("\033[91mcrontab Reading error:\033[0m %v", err)
+	}
+
+
+	if err := crontabFile.Truncate(0); err != nil {
+		log.Fatalf("\033[91mcouldn't truncate cron file:\033[0m %v", err)
+	}
+
+	if _, err := crontabFile.Seek(0, 0); err != nil {
+		log.Fatalf("\033[91mcouldn't find cron file: \033[0m%v", err)
+	}
+
+	if _, err := crontabFile.WriteString(crontabContent.String()); err != nil {
+		log.Fatalf("\033[91mCouldn't write cron file:\033[0m %v", err)
+	}
+
+	fmt.Println("\033[92mCron entry added successfully!\033[0m")
+}
 func udp2raw() {
 	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
@@ -319,7 +555,6 @@ func kharejip4() {
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
-		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
@@ -339,7 +574,7 @@ func kharejip4() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -385,7 +620,7 @@ func kharejip4() {
 		}
 
 		
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -398,7 +633,6 @@ func iranip4() {
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
-		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
@@ -417,9 +651,9 @@ func iranip4() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -491,7 +725,7 @@ func iranip4() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l0.0.0.0:%s -r %s:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
@@ -499,7 +733,7 @@ func iranip4() {
 			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
 		}
 
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
@@ -555,6 +789,7 @@ func kharejip6() {
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	reader := bufio.NewReader(os.Stdin)
@@ -569,7 +804,7 @@ func kharejip6() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -610,7 +845,7 @@ func kharejip6() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -627,6 +862,7 @@ func iranip6() {
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	var clientIP, portTunnel, password, wireguardPort, rawMode string
@@ -641,9 +877,9 @@ func iranip6() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -714,7 +950,7 @@ func iranip6() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l[::]:%s -r [%s]:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
@@ -722,7 +958,7 @@ func iranip6() {
 			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
 		}
 
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
@@ -823,7 +1059,7 @@ func restartudp() {
 	}
 
 	for i := 1; i <= numConfigs; i++ {
-		serviceName := fmt.Sprintf("azumiudp_iran-%d", i)
+		serviceName := fmt.Sprintf("azumiudp_iran-%d", i+1)
 		cmd := exec.Command("systemctl", "restart", serviceName)
 		cmd.Run()
 		time.Sleep(1 * time.Second)
@@ -871,7 +1107,7 @@ func restartfec() {
 	}
 
 	for i := 1; i <= numConfigs; i++ {
-		serviceName := fmt.Sprintf("azumifec_iran-%d", i)
+		serviceName := fmt.Sprintf("azumifec_iran-%d", i+1)
 		cmd := exec.Command("systemctl", "restart", serviceName)
 		cmd.Run()
 		time.Sleep(1 * time.Second)
@@ -952,7 +1188,7 @@ func stopudp() {
 	}
 
 	for i := 1; i <= numConfigs; i++ {
-		serviceName := fmt.Sprintf("azumiudp_iran-%d", i)
+		serviceName := fmt.Sprintf("azumiudp_iran-%d", i+1)
 		cmd := exec.Command("systemctl", "stop", serviceName)
 		cmd.Run()
 		time.Sleep(1 * time.Second)
@@ -1000,7 +1236,7 @@ func stopfec() {
 	}
 
 	for i := 1; i <= numConfigs; i++ {
-		serviceName := fmt.Sprintf("azumifec_iran-%d", i)
+		serviceName := fmt.Sprintf("azumifec_iran-%d", i+1)
 		cmd := exec.Command("systemctl", "stop", serviceName)
 		cmd.Run()
 		time.Sleep(1 * time.Second)
@@ -1302,7 +1538,7 @@ func kharejSingle() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -1360,7 +1596,7 @@ func kharejSingle() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -1392,9 +1628,9 @@ func iranSingle() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -1475,7 +1711,7 @@ func iranSingle() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l0.0.0.0:%s -r %s:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
@@ -1484,14 +1720,14 @@ func iranSingle() {
 		}
 
 		azumifecData := ServiceData{
-			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumifec_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
 			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
 		}
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
@@ -1552,6 +1788,7 @@ func kharej6() {
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	reader := bufio.NewReader(os.Stdin)
@@ -1566,7 +1803,7 @@ func kharej6() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -1624,7 +1861,7 @@ func kharej6() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -1641,6 +1878,7 @@ func iran6() {
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
@@ -1655,9 +1893,9 @@ func iran6() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -1738,7 +1976,7 @@ func iran6() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l[::]:%s -r [%s]:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
@@ -1747,14 +1985,14 @@ func iran6() {
 		}
 
 		azumifecData := ServiceData{
-			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumifec_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
 			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
 		}
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
@@ -1860,7 +2098,7 @@ func removeIpSingle() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 
 	defer Panic()
-
+        deleteCron()
 	removeIPIP6()
 	removeSingle()
 
@@ -1886,9 +2124,10 @@ func removeICMPSingle() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving \033[92mUDP + ICMP\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        
 	defer Panic()
-    removeICMP()
+	deleteCron()
+        removeICMP()
 	resetICMP()
 	removeSingle()
     
@@ -1914,9 +2153,9 @@ func removeSingle() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        
 	defer Panic()
-
+        deleteCron()
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
@@ -1999,9 +2238,9 @@ func removeSingle1() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config 1 ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        
 	defer Panic()
-
+        deleteCron()
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
@@ -2041,9 +2280,9 @@ func removeSingle2() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config 2 ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        
 	defer Panic()
-
+        deleteCron()
 	if _, err := os.Stat("/root/udp"); err == nil {
 		os.RemoveAll("/root/udp")
 	}
@@ -2084,7 +2323,7 @@ func removeSingle3() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config 3 ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        deleteCron()
 	defer Panic()
 
 	if _, err := os.Stat("/root/udp"); err == nil {
@@ -2126,7 +2365,7 @@ func removeSingle4() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config 4 ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        deleteCron()
 	defer Panic()
 
 	if _, err := os.Stat("/root/udp"); err == nil {
@@ -2168,7 +2407,7 @@ func removeSingle5() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("\033[93mRemoving UDP2RAW Config 5 ..\033[0m")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-
+        deleteCron()
 	defer Panic()
 
 	if _, err := os.Stat("/root/udp"); err == nil {
@@ -2551,7 +2790,7 @@ func kharejIcmp() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -2609,7 +2848,7 @@ func kharejIcmp() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -2647,9 +2886,9 @@ func iranIcmp() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -2720,7 +2959,7 @@ func iranIcmp() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l0.0.0.0:%s -r70.0.0.1:%s -k \"%s\" %s -a",
 				wireguardPort, portTunnel, password, rawAzumi),
 		}
@@ -2729,14 +2968,14 @@ func iranIcmp() {
 		}
 
 		azumifecData := ServiceData{
-			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumifec_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l0.0.0.0:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
 			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
 		}
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
@@ -3320,7 +3559,7 @@ func kharejPri() {
 
 	for i := 0; i < numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
@@ -3378,7 +3617,7 @@ func kharejPri() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
+                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		readInput()
 	}
@@ -3426,9 +3665,9 @@ func iranPri() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 1; i <= numConfigs; i++ {
+	for i := 0; i <= numConfigs; i++ {
 	    fmt.Println("\033[93m─────────────────\033[0m")
-		fmt.Printf("\033[92m    Config %d:\n\033[0m", i)
+		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
@@ -3500,7 +3739,7 @@ func iranPri() {
 		}
 
 		azumiudpData := ServiceData{
-			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumiudp_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l[::]:%s -r [2002:0db8:1234:a220::1]:%s -k \"%s\" %s -a",
 				wireguardPort, portTunnel, password, rawAzumi),
 		}
@@ -3509,14 +3748,14 @@ func iranPri() {
 		}
 
 		azumifecData := ServiceData{
-			ServiceName: fmt.Sprintf("azumifec_iran-%d", i),
+			ServiceName: fmt.Sprintf("azumifec_iran-%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -c -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k \"%s\"",
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
 			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
 		}
-
+                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
 		currentIPv4 := getIPv4()
 
