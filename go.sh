@@ -32,10 +32,10 @@ go mod tidy
 go get github.com/AlecAivazis/survey/v2
 go get github.com/fatih/color
 
-if [ ! -f "udpfec.go" ]; then
-    wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go
-else
-    echo "go script exists, moving on.."
+if [ -f "/root/udpfec.go" ]; then
+    sudo rm -f /root/udpfec.go
 fi
+wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go
+
 
 go run udpfec.go
