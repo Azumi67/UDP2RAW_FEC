@@ -207,7 +207,7 @@ func mainMenu() {
 		fmt.Println(border)
 		prompt := &survey.Select{
 			Message: "Enter your choice Please:",
-			Options: []string{"0. \033[91mSTATUS Menu\033[0m", "1. \033[96mUDP2RAW \033[92mNO FEC \033[0m", "2. \033[93mUDP2RAW FEC \033[92mIPV4\033[0m", "3. \033[96mUDP2RAW FEC \033[92mIPV6\033[0m", "4. \033[93mUDP2RAW FEC \033[92mICMP\033[0m", "5. \033[96mUDP2RAW FEC \033[92mIP6IP6\033[0m", "6. \033[92mStop | Restart Service\033[0m", "7. \033[91mUninstall\033[0m", "q. Exit"},
+			Options: []string{"0. \033[91mSTATUS Menu\033[0m", "1. \033[96mUDP2RAW \033[0m", "2. \033[93mUDP2RAW FEC \033[92mIPV4\033[0m", "3. \033[96mUDP2RAW FEC \033[92mIPV6\033[0m", "4. \033[93mUDP2RAW FEC \033[92mICMP\033[0m", "5. \033[96mUDP2RAW FEC \033[92mIP6IP6\033[0m", "6. \033[92mStop | Restart Service\033[0m", "7. \033[91mUninstall\033[0m", "q. Exit"},
 		
 		}
 		fmt.Println("\033[93m╰─────────────────────────────────────────────────────────────────────╯\033[0m")
@@ -220,7 +220,7 @@ func mainMenu() {
 		switch choice {
 		case "0. \033[91mSTATUS Menu\033[0m":
 			status()
-		case "1. \033[96mUDP2RAW \033[92mNO FEC \033[0m":
+		case "1. \033[96mUDP2RAW \033[0m":
 			udp2raw()
 		case "2. \033[93mUDP2RAW FEC \033[92mIPV4\033[0m":
 			udp2rawsingle()
@@ -294,7 +294,7 @@ func deleteCron() {
 		}
 		displayNotification("\033[92mDeleting Previous Crons..\033[0m")
 	} else {
-		displayError("\033[91mNothing Found, moving on..!\033[0m")
+		fmt.Println("\033[91mCron doesn't exist, moving on..!\033[0m")
 	}
 }
 
@@ -330,12 +330,18 @@ func resKharej() {
 
 	fmt.Println("╭──────────────────────────────────────╮")
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [2 Hours Reset Timer]\033[93m: \033[0m")
+	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [for Reset Timer]\033[93m: \033[0m")
 	configCountStr, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
 	}
 	configCountStr = strings.TrimSpace(configCountStr)
+	fmt.Print("\033[93mEnter reset time in \033[92mhours\033[93m: \033[0m")
+	resetTimeStr, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
+	}
+	resetTimeStr = strings.TrimSpace(resetTimeStr)
 	fmt.Println("╰──────────────────────────────────────╯")
 
 	configCount, err := strconv.Atoi(configCountStr)
@@ -343,7 +349,12 @@ func resKharej() {
 		log.Fatalf("\033[91minvalid input for Configs number:\033[0m %v", err)
 	}
 
-	hours := configCount * 2
+	resetTime, err := strconv.Atoi(resetTimeStr)
+	if err != nil {
+		log.Fatalf("\033[91minvalid input for reset time:\033[0m %v", err)
+	}
+
+	hours := configCount * resetTime
 
 	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
 
@@ -417,12 +428,18 @@ func resIran() {
 
 	fmt.Println("╭──────────────────────────────────────╮")
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [2 Hours Reset Timer]\033[93m: \033[0m")
+	fmt.Print("\033[93mEnter number of \033[92mConfigs\033[96m [for Reset Timer]\033[93m: \033[0m")
 	configCountStr, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
 	}
 	configCountStr = strings.TrimSpace(configCountStr)
+	fmt.Print("\033[93mEnter reset time in \033[92mhours\033[93m: \033[0m")
+	resetTimeStr, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("\033[91minvalid input: %v\033[0m", err)
+	}
+	resetTimeStr = strings.TrimSpace(resetTimeStr)
 	fmt.Println("╰──────────────────────────────────────╯")
 
 	configCount, err := strconv.Atoi(configCountStr)
@@ -430,7 +447,12 @@ func resIran() {
 		log.Fatalf("\033[91mInvalid input for Configs number:\033[0m %v", err)
 	}
 
-	hours := configCount * 2
+	resetTime, err := strconv.Atoi(resetTimeStr)
+	if err != nil {
+		log.Fatalf("\033[91minvalid input for reset time:\033[0m %v", err)
+	}
+
+	hours := configCount * resetTime
 
 	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
 
@@ -465,7 +487,6 @@ func resIran() {
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("\033[91mcrontab Reading error:\033[0m %v", err)
 	}
-
 
 	if err := crontabFile.Truncate(0); err != nil {
 		log.Fatalf("\033[91mcouldn't truncate cron file:\033[0m %v", err)
@@ -3827,10 +3848,16 @@ WantedBy=multi-user.target
 		fmt.Printf("\033[91mCan't enable service %s:\033[0m %s\n", data.ServiceName, err)
 	}
 
+	cmd = exec.Command("chmod", "u+x", filePath)
+	err = cmd.Run()
+	if err != nil {
+		fmt.Printf("\033[91mChmod Failed! %s:\033[0m %s\n", data.ServiceName, err)
+	}
+
 	cmd = exec.Command("systemctl", "restart", data.ServiceName)
 	err = cmd.Run()
 	if err != nil {
-		fmt.Printf("\033[91mrestart service %s Failed:\033[0m %s\n", data.ServiceName, err)
+		fmt.Printf("\033[91mRestart service %s Failed:\033[0m %s\n", data.ServiceName, err)
 	}
 
 	return nil
