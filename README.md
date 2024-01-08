@@ -327,7 +327,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
   <summary align="right">Click to reveal image</summary>
   
   <p align="right">
-    <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/3e1ed4b1-53f3-4aec-b5bd-ddeda59577ba" alt="menu screen" />
+    <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/b436d7f0-0a25-4eab-9961-4aa049e3ccfa" alt="menu screen" />
   </p>
 </details>
 
