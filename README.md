@@ -1,30 +1,37 @@
 ![R (2)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/a064577c-9302-4f43-b3bf-3d4f84245a6f)
 نام پروژه : تانل UDP2RAW + FEC[UDPSPEED] برای وایرگارد
 ---------------------------------------------------------------
-![Update-Note--Arvin61r58](https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/ddffc8a7-7827-48f5-a39d-2f810b949ffe)**آپدیت**
 
-- به جای fix latency از mode 1 استفاده کردم که پینگ را کاهش بده.
-- و FEC همچنان مانند قبل بدون تغییر خواهد ماند.
-- اگر بر روی ایپی 6 تایم اوت داشتید از ایپی 4 با fec استفاده کنید یا ایپی 6 دیگری بسازید که اختلال برطرف شود.
-- اگر موفق نمیشید که fec را پیاده سازی کنید، یا دوباره طبق آموزش جلو بروید یا از گزینه یک ( بدون FEC ) استفاده نمایید.
-- اسکریپت بارها تست شده و همه گزینه ها کار میکند.
-- اگر اختلالی در تانل داشتید همیشه وارد مسیر روبرو شوید cd /etc/systemd/system و با دستور ls ، سرویس های خارج و ایران را بیابید و با دستور systemctl status servicename و یا journalctl -u servicename.service ، دلیل اختلال تانل را بیابید
+![check](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/13de8d36-dcfe-498b-9d99-440049c0cf14)
+**امکانات**
 
------------
-![Update-Note--Arvin61r58](https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/5e674e32-49a1-4582-b69f-5c10892590a4)**اپدیت**
 
-- ریست تایمر به صورت دلخواه بر اساس ساعت هم اضافه شد. لاگ های تانل و cache و سرویس ها هر دو ساعت ریست میشود.
-- مانند عکس پایین برای اضافه شدن ریست تایمر، تعداد کانفیگ خود را وارد نمایید . من یک عدد کانفیگ داشتم، پس عدد یک را وارد میکنم. باید خودتان عددی را برای ریست تایمر وارد نمایید.
+- پشتیبانی از UDP
+- پایین اوردن PACKET LOST در کانکشن نهایی
+- قابلیت تانل بر روی تک پورت و چندین پورت
+- امکان استفاده از ایپی 4 و 6
+- استفاده از FEC در تانل
+- امکان استفاده از IP6IP6 و تانل UDP2RAW به همراه FEC
+- امکان استفاده ار ICMP با پرایوت ایپی 4 و تانل UDP2RAW به همراه FEC
+- ایجاد سرویس برای تمامی گزینه ها
+- امکان حذف تمامی تانل ها و سرویس ها
 
- <p align="right">
-  <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/3f2d3c7d-4583-45bd-b2c4-276e8b35dc6b" alt="Image" />
-</p>
+-------------------
 
---------------
-**توضیح کوتاه در مورد این پروژه :**
+What is FEC ?
+FEC stands for Forward Error Correction. It is a technique used in data communication to enhance the reliability of data transmission over unreliable or noisy channels. The purpose of FEC is to detect and correct errors that may occur during transmission without the need for retransmission.
+Overall, FEC helps improve the reliability and quality of data transmission by adding error correction codes to the transmitted data, allowing for the detection and correction of errors at the receiving end.
+
+ ------------------------------------------------------
+
+ <div align="right">
+  <details>
+    <summary><strong>توضیحات</strong></summary>
+  
+------------------------------------ 
 
 - حتما در سرور تست، نخست تانل را ازمایش کنید و سپس اقدام به استفاده از آن بکنید.
-- تمامی جوانب را در نظر بگیرید و از تانل استفاده نمایید.
+- این احتمال هست که بر روی بعضی سرور های ایران کار نکند.
 - باید توجه داشته باشید برای تمرین و اموزش خودم، اقدام به ساخت اسکریپت میکنم و در کنارش آموزش هم مینویسم که شما اگر خواستید استفاده کنید.
 - این اسکریپت با زبان GO نوشته شده است و از انجا که در مسیر یادگیری هستم، اگر مشکلی یا کاستی در آن دیدید، ببخشید.
 - در این اسکریپت از منوی جدیدی استفاده کردم. میتوانید با کیبورد، گزینه مورد نظر را انتخاب کنید و سپس ENTER بزنید.
@@ -33,11 +40,47 @@
 - پنل وایرگارد در خارج باید نصب شده باشد یا اگر بدون پنل هستید ، باید وایرگارد در خارج نصب شده باشد.
 - لطفا برای کانفیگ دوباره، نخست از منوی uninstall اقدام به حذف تانل کنید تا مشکلی پیش نیاید.
 - در آخر هر کانفیگ، ایپی 4 سرور ایران شما با پورت نهایی نمایش داده میشود.
+
+![Exclamation-Mark-PNG-Clipart](https://github.com/Azumi67/Game_tunnel/assets/119934376/3951d7d9-0e17-4723-b07f-786500ccbc7f)**چند نکته**
+
+- برای تانل ICMP ، حتما اگر اشتباهی در کانفیگ انجام دادید باید حتما هم در سرور ایران و خارج حذفش کنید و هر دو سرور ریبوت شود در غیر این صورت خطای SERVER IS FULL را میگیرید.
+- قبل از کانفیگ دوباره، همیشه با دستور ip a مشاهده کنید که tun0 یا tun1 که مربوط به icmp است ، موجود نباشد. حتما پس از Uninstall ICMP سرور خود را ریست نمایید.
+- مورد دیگر اینکه، در سرور های ایران اگر DNS مشکل داشته باشد، ممکن است دانلود انجام نشود. حتما از طریق nano /etc/resolv.conf اقدام به تغییر موقتی dns خود بکنید .
+- ممکن است در سرور ایران شما، سرعت دانلود پایین باشد و برای همین، ممکنه که دانلود پیش نیاز ها کمی طول بکشد.
+- پورت ها در آموزش برای مثال استفاده شده اند، شما میتوانید از پورت های دلخواه خودتان استفاده نمایید.
+  </details>
+</div>
+
 --------------
-![Go_(programming_language)-Logo wine](https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/71b80a34-9515-42de-8238-9065986104a1)**اموزش نصب go مورد نیاز برای اجرای اسکریپت**
+  <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/Rathole_reverseTunnel/assets/119934376/3cfd920d-30da-4085-8234-1eec16a67460" alt="Image"> آپدیت</strong></summary>
+  
+------------------------------------ 
+
+
+- ریست تایمر به صورت دلخواه بر اساس ساعت هم اضافه شد. لاگ های تانل و cache و سرویس ها هر دو ساعت ریست میشود.
+- مانند عکس پایین برای اضافه شدن ریست تایمر، تعداد کانفیگ خود را وارد نمایید . من یک عدد کانفیگ داشتم، پس عدد یک را وارد میکنم. باید خودتان عددی را برای ریست تایمر وارد نمایید.
+- به جای fix latency از mode 1 استفاده کردم که پینگ را کاهش بده.
+- و FEC همچنان مانند قبل بدون تغییر خواهد ماند.
+- اگر بر روی ایپی 6 تایم اوت داشتید از ایپی 4 با fec استفاده کنید یا ایپی 6 دیگری بسازید که اختلال برطرف شود.
+- اگر موفق نمیشید که fec را پیاده سازی کنید، یا دوباره طبق آموزش جلو بروید یا از گزینه یک ( بدون FEC ) استفاده نمایید.
+- اسکریپت بارها تست شده و همه گزینه ها کار میکند.
+- اگر اختلالی در تانل داشتید همیشه وارد مسیر روبرو شوید cd /etc/systemd/system و با دستور ls ، سرویس های خارج و ایران را بیابید و با دستور systemctl status servicename و یا journalctl -u servicename.service ، دلیل اختلال تانل را بیابید
+  </details>
+</div>
+
+------------------
+
+  <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/71b80a34-9515-42de-8238-9065986104a1" alt="Image"> اموزش نصب go مورد نیاز برای اجرای اسکریپت</strong></summary>
+  
+------------------------------------ 
 
 - شما میتوانید از طریق اسکریپت [Here](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%85%D9%86) ، این پیش نیاز را نصب کنید یا به صورت دستی نصب نمایید.
 - لطفا پس از نصب پیش نیاز ، برای اجرای اسکریپت go برای بار اول، ممکن تا 10 ثانیه طول بکشد اما بعد از آن سریع اجرا میشود.
+- یا به صورت دستی :
 ```
 sudo apt update
 arm64 : wget https://go.dev/dl/go1.21.5.linux-arm64.tar.gz
@@ -58,61 +101,12 @@ go get github.com/fatih/color
 
 ```
 - سپس اسکریپت را میتوانید اجرا نمایید.
-
-
---------------
-![Exclamation-Mark-PNG-Clipart](https://github.com/Azumi67/Game_tunnel/assets/119934376/3951d7d9-0e17-4723-b07f-786500ccbc7f)**چند نکته**
-
-- برای تانل ICMP ، حتما اگر اشتباهی در کانفیگ انجام دادید باید حتما هم در سرور ایران و خارج حذفش کنید و هر دو سرور ریبوت شود در غیر این صورت خطای SERVER IS FULL را میگیرید.
-- قبل از کانفیگ دوباره، همیشه با دستور ip a مشاهده کنید که tun0 یا tun1 که مربوط به icmp است ، موجود نباشد. حتما پس از Uninstall ICMP سرور خود را ریست نمایید.
-- مورد دیگر اینکه، در سرور های ایران اگر DNS مشکل داشته باشد، ممکن است دانلود انجام نشود. حتما از طریق nano /etc/resolv.conf اقدام به تغییر موقتی dns خود بکنید .
-- ممکن است در سرور ایران شما، سرعت دانلود پایین باشد و برای همین، ممکنه که دانلود پیش نیاز ها کمی طول بکشد.
-- پورت ها در آموزش برای مثال استفاده شده اند، شما میتوانید از پورت های دلخواه خودتان استفاده نمایید.
-
-
-------------------------
-![307981](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/39b2794b-fd04-4ae5-baea-d4b66138766e)
- **فهرست :**
- ----------------------
- 
-**دسترسی سریع به اسکریپت** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%85%D9%86)**
-- **امکانات** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D9%85%DA%A9%D8%A7%D9%86%D8%A7%D8%AA)**
-
-**آموزش** : 
-- **تانل UDP2RAW FEC IPV4** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
-- **تانل UDP2RAW FEC IPV6** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-ipv4-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF-1)**
-- **تانل UDP2RAW FEC ICMP** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec-icmp-%D8%AA%DA%A9-%DA%A9%D8%A7%D9%86%D9%81%DB%8C%DA%AF)**
-- **تانل UDP2RAW FEC + PrivateIP** >>  **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%AA%D8%A7%D9%86%D9%84-udp2raw-fec--privateip)**
-- **اسکریپت های کارآمد** >> **[کلیک](https://github.com/Azumi67/UDP2RAW_FEC#%D8%A7%D8%B3%DA%A9%D8%B1%DB%8C%D9%BE%D8%AA-%D9%87%D8%A7%DB%8C-%DA%A9%D8%A7%D8%B1%D8%A2%D9%85%D8%AF-)**
+  </details>
+</div>
 
 --------------
- 
- ![Exclamation-Mark-PNG-Clipart](https://github.com/Azumi67/KCP_tunnel/assets/119934376/96bc9a31-57d1-4c14-a988-f9284f547955)**نکته**
 
-- من تنها وقت تست تک کانفیگ وایرگارد را داشتم. شما میتوانید چندین کانفیگ را تست کنید و به من فیدبک بدید.
 
-------------------------
-![check](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/13de8d36-dcfe-498b-9d99-440049c0cf14)
-**امکانات**
--
-
-- پشتیبانی از UDP
-- پایین اوردن PACKET LOST در کانکشن نهایی
-- قابلیت تانل بر روی تک پورت و چندین پورت
-- امکان استفاده از ایپی 4 و 6
-- استفاده از FEC در تانل
-- امکان استفاده از IP6IP6 و تانل UDP2RAW به همراه FEC
-- امکان استفاده ار ICMP با پرایوت ایپی 4 و تانل UDP2RAW به همراه FEC
-- ایجاد سرویس برای تمامی گزینه ها
-- امکان حذف تمامی تانل ها و سرویس ها
-
--------------------
-
-What is FEC ?
-FEC stands for Forward Error Correction. It is a technique used in data communication to enhance the reliability of data transmission over unreliable or noisy channels. The purpose of FEC is to detect and correct errors that may occur during transmission without the need for retransmission.
-Overall, FEC helps improve the reliability and quality of data transmission by adding error correction codes to the transmitted data, allowing for the detection and correction of errors at the receiving end.
-
- ------------------------------------------------------
 
 ![147-1472495_no-requirements-icon-vector-graphics-clipart](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/98d8c2bd-c9d2-4ecf-8db9-246b90e1ef0f)
  **پیش نیازها**
@@ -127,9 +121,14 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
   ![6348248](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/398f8b07-65be-472e-9821-631f7b70f783)
 **آموزش**
 -
-![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC IPV4**
-----------------------------------
+ <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/Rathole_reverseTunnel/assets/119934376/fcbbdc62-2de5-48aa-bbdd-e323e96a62b5" alt="Image"> </strong>تانل UDP2RAW FEC IPV4</summary>
+  
+  
+------------------------------------ 
+
+
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
 **مسیر : UDP2RAW FEC IPV4 > Kharej**
@@ -178,11 +177,17 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 - برای تانل udp2raw بدون fec اموزشی قرار ندادم چون همه دیگه بهش اشنا هستید.
 - اما به صورت کلی پورت تانل و پورت وایرگارد و پسورد و raw mode را انتخاب میکنید.
 - و در سرور ایران هم مانند سرور خارج، تمام موارد بالا به اضافه ایپی خارج را وارد میکنید.
+</details>
+</div>
 
---------------------------------------
-![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC IPV6**
--
+ <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/Rathole_reverseTunnel/assets/119934376/fcbbdc62-2de5-48aa-bbdd-e323e96a62b5" alt="Image"> </strong>تانل UDP2RAW FEC IPV6</summary>
+  
+  
+------------------------------------ 
+
+
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
 **مسیر : UDP2RAW FEC IPV6 > Kharej**
@@ -220,10 +225,17 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 - پسورد هم که در سرور خارج azumi وارد کردیم.
 - در سرور خارج raw mode را icmp انتخاب کرده بودیم.
 - در آخر ایپی سرور ایران شما با پورت نهایی برای وایرگارد نمایش داده میشود.
---------------------------------------
-![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC ICMP**
-----------------------------------
+  </details>
+</div>
+
+ <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/Rathole_reverseTunnel/assets/119934376/fcbbdc62-2de5-48aa-bbdd-e323e96a62b5" alt="Image"> </strong>تانل UDP2RAW FEC ICMP</summary>
+  
+  
+------------------------------------ 
+
+
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
 **مسیر : UDP2RAW FEC ICMP > KHAREJ**
@@ -267,10 +279,17 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 - در سرور خارج raw mode را udp انتخاب کرده بودیم.
 - در آخر ایپی سرور ایران شما با پورت نهایی برای وایرگارد نمایش داده میشود.
 
---------------------------------------
-![OIP2 (1)](https://github.com/Azumi67/V2ray_loadbalance_multipleServers/assets/119934376/3ec2f05f-3308-4441-8cce-62ab4776f4e2)
-**تانل UDP2RAW FEC + PrivateIP**
-----------------------------------
+  </details>
+</div>
+
+ <div align="right">
+  <details>
+    <summary><strong><img src="https://github.com/Azumi67/Rathole_reverseTunnel/assets/119934376/fcbbdc62-2de5-48aa-bbdd-e323e96a62b5" alt="Image"> </strong>تانل UDP2RAW FEC + PrivateIP</summary>
+  
+  
+------------------------------------ 
+
+
 ![green-dot-clipart-3](https://github.com/Azumi67/6TO4-PrivateIP/assets/119934376/902a2efa-f48f-4048-bc2a-5be12143bef3) **سرور خارج**
 
 **مسیر : UDP2RAW FEC IP6IP6 > KHAREJ**
@@ -319,7 +338,10 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
 - در سرور خارج raw mode را icmp انتخاب کرده بودیم.
 - در آخر ایپی سرور ایران شما با پورت نهایی برای وایرگارد نمایش داده میشود.
 
---------------------------------------
+</details>
+</div>
+
+----------------------------------
 **اسکرین شات**
 
 
@@ -327,7 +349,7 @@ Overall, FEC helps improve the reliability and quality of data transmission by a
   <summary align="right">Click to reveal image</summary>
   
   <p align="right">
-    <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/b436d7f0-0a25-4eab-9961-4aa049e3ccfa" alt="menu screen" />
+    <img src="https://github.com/Azumi67/UDP2RAW_FEC/assets/119934376/9c9c5ef3-204a-4dec-9ca6-57eda5c32330" alt="menu screen" />
   </p>
 </details>
 
@@ -363,20 +385,15 @@ wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-opti
 
 - دستور زیر فایل های پیش نیاز را نصب میکند و سپس اقدام به اجرای اسکریپت میکند. اگر مشکلی داشتید به صورت دستی هم میتوانید نصب کنید
 ```
-sudo apt install curl -y && bash <(curl -s https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/go.sh)
+sudo apt install curl -y  && bash <(curl -s https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/go.sh)
 ```
 
 - اگر به صورت دستی نصب کردید و پیش نیاز ها را هم دارید و میخواهید به صورت دستی هم اسکریپت را اجرا کنید میتوانید با دستور زیر اینکار را انجام دهید
 
   
 ```
-sudo apt install wget -y && wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go && go run udpfec.go
+sudo apt install wget -y && rm udpfec.go && wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go && go run udpfec.go
 ```
----------------------------------------------
-![R (7)](https://github.com/Azumi67/PrivateIP-Tunnel/assets/119934376/42c09cbb-2690-4343-963a-5deca12218c1)
-**تلگرام** 
-![R (6)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/f81bf6e1-cfed-4e24-b944-236f5c0b15d3) [اپیران- OPIRAN](https://t.me/OPIranClubb)
-
 ---------------------------------
 ![R23 (1)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/18d12405-d354-48ac-9084-fff98d61d91c)
 **سورس ها**
@@ -393,8 +410,3 @@ sudo apt install wget -y && wget https://raw.githubusercontent.com/Azumi67/UDP2R
 
 
 -----------------------------------------------------
-
-![youtube-131994968075841675](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/24202a92-aff2-4079-a6c2-9db14cd0ecd1)
-**ویدیوی آموزش**
-
------------------------------------------
