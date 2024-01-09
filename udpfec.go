@@ -247,7 +247,7 @@ func mainMenu() {
 }
 func deleteCron() {
 	entriesToDelete := []string{
-		"0 */1 * * * /etc/udp.sh",
+		"0 * * * * /etc/udp.sh",
 		"0 */2 * * * /etc/udp.sh",
 		"0 */3 * * * /etc/udp.sh",
 		"0 */4 * * * /etc/udp.sh",
@@ -356,7 +356,12 @@ func resKharej() {
 
 	hours := configCount * resetTime
 
-	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+	cronEntry := ""
+	if hours == 1 {
+		cronEntry = "0 * * * * /etc/udp.sh"
+	} else {
+		cronEntry = fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+	}
 
 	crontabFile, err := os.OpenFile(crontabFilePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
@@ -452,9 +457,15 @@ func resIran() {
 		log.Fatalf("\033[91minvalid input for reset time:\033[0m %v", err)
 	}
 
+
 	hours := configCount * resetTime
 
-	cronEntry := fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+	var cronEntry string
+	if resetTime == 1 {
+		cronEntry = fmt.Sprintf("0 * * * * /etc/udp.sh")
+	} else {
+		cronEntry = fmt.Sprintf("0 */%d * * * /etc/udp.sh", hours)
+	}
 
 	crontabFile, err := os.OpenFile(crontabFilePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
