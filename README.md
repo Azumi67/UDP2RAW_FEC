@@ -392,7 +392,8 @@ sudo apt install curl -y  && bash <(curl -s https://raw.githubusercontent.com/Az
 
   
 ```
-sudo apt install wget -y && rm udpfec.go && wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go && go run udpfec.go
+rm udpfec.go
+sudo apt install wget -y && wget -O /etc/logo.sh https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/logo.sh && chmod +x /etc/logo.sh && wget https://raw.githubusercontent.com/Azumi67/UDP2RAW_FEC/main/udpfec.go && go run udpfec.go
 ```
 ---------------------------------
 ![R23 (1)](https://github.com/Azumi67/FRP-V2ray-Loadbalance/assets/119934376/18d12405-d354-48ac-9084-fff98d61d91c)
