@@ -1,3 +1,4 @@
+
 //Author:github.com/Azumi67
 //This script is for educational use and for my own learning, but I'd be happy if you find it useful too.
 //This script simplifies the configuration of FEC & UDP2raw. You can also use IP6IP6 & ICMP next to the tunnel.
@@ -583,6 +584,7 @@ func kharejip4() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV4\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 	} else {
@@ -592,6 +594,7 @@ func kharejip4() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -603,28 +606,30 @@ func kharejip4() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
-
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -638,40 +643,43 @@ func kharejip4() {
 			return
 		}
 
-		
 		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l0.0.0.0:%s -r127.0.0.1:%s -k %s %s -a",
 				portTunnel, wireguardPort, password, rawAzumi),
 		}
+
 		err := createService(azumiudpData)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		
-                resKharej()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput() 
 }
 func iranip4() {
-    clearScreen()
+	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV4\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
-    fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var clientIP, portTunnel, password, wireguardPort, rawMode string
 
+	var clientIP, portTunnel, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -681,8 +689,8 @@ func iranip4() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
@@ -708,7 +716,6 @@ func iranip4() {
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
 
-
 		for {
 			fmt.Print("\033[93mEnter Password: \033[0m")
 			password, _ = reader.ReadString('\n')
@@ -728,13 +735,13 @@ func iranip4() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")  
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -759,21 +766,24 @@ func iranip4() {
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l0.0.0.0:%s -r %s:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
+
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
+			continue
 		}
 
-                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, wireguardPort)
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, wireguardPort)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 func udp2rawip6() {
 	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
@@ -813,15 +823,18 @@ func kharejip6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -833,27 +846,30 @@ func kharejip6() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -866,7 +882,8 @@ func kharejip6() {
 			fmt.Println("\033[91mInvalid choice.\033[0m")
 			return
 		}
-				azumiudpData := ServiceData{
+
+		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l[::]:%s -r127.0.0.1:%s -k %s %s -a",
 				portTunnel, wireguardPort, password, rawAzumi),
@@ -875,29 +892,35 @@ func kharejip6() {
 		if err != nil {
 			log.Fatal(err)
 		}
-                resKharej()
+
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput()
 }
+
 func iranip6() {
-    clearScreen()
+	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var clientIP, portTunnel, password, wireguardPort, rawMode string
 
+	var clientIP, portTunnel, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -907,8 +930,8 @@ func iranip6() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
@@ -953,13 +976,13 @@ func iranip6() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m") 
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -984,21 +1007,24 @@ func iranip6() {
 			Command: fmt.Sprintf("/root/udp/./udp2raw -c -l[::]:%s -r [%s]:%s -k \"%s\" %s -a",
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
+
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
+			continue
 		}
 
-                resIran()
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, wireguardPort)
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, wireguardPort)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 func startMain() {
 	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
@@ -1546,6 +1572,7 @@ func kharejSingle() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV4\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
@@ -1556,6 +1583,7 @@ func kharejSingle() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -1567,31 +1595,34 @@ func kharejSingle() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter \033[92mFEC \033[93mPort: \033[0m")
 		portFEC, _ := reader.ReadString('\n')
-		portFEC = strings.TrimSpace(strings.TrimSuffix(portFEC, "\n"))
+		portFEC = strings.TrimSpace(portFEC)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -1605,7 +1636,6 @@ func kharejSingle() {
 			return
 		}
 
-		
 		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l0.0.0.0:%s -r127.0.0.1:%s -k %s %s -a",
@@ -1616,7 +1646,6 @@ func kharejSingle() {
 			log.Fatal(err)
 		}
 
-		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
@@ -1626,29 +1655,35 @@ func kharejSingle() {
 		if err != nil {
 			log.Fatal(err)
 		}
-                resKharej()
+
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput()
 }
+
 func iranSingle() {
-    clearScreen()
+	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV4\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
-    fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
 
+	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -1658,8 +1693,8 @@ func iranSingle() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
@@ -1714,13 +1749,13 @@ func iranSingle() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")  
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -1746,7 +1781,7 @@ func iranSingle() {
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
 		}
 
 		azumifecData := ServiceData{
@@ -1755,19 +1790,21 @@ func iranSingle() {
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i+1, err)
 		}
-                resIran()
-		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, portFEC)
+		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
+
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, portFEC)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 func displayAddress(currentIPv4 string, portFEC string) {
 	fmt.Println("\033[93m╭─────────────────────────────────────────────────────────╮\033[0m")
 	fmt.Printf("\033[93m| Your Address & Port: %s : %s  \033[0m\n", currentIPv4, portFEC)
@@ -1812,15 +1849,18 @@ func kharej6() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -1832,31 +1872,34 @@ func kharej6() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter \033[92mFEC \033[93mPort: \033[0m")
 		portFEC, _ := reader.ReadString('\n')
-		portFEC = strings.TrimSpace(strings.TrimSuffix(portFEC, "\n"))
+		portFEC = strings.TrimSpace(portFEC)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -1870,7 +1913,6 @@ func kharej6() {
 			return
 		}
 
-		
 		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l[::]:%s -r127.0.0.1:%s -k %s %s -a",
@@ -1881,7 +1923,6 @@ func kharej6() {
 			log.Fatal(err)
 		}
 
-		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s -r127.0.0.1:%s --mode 1 -f20:10 -k %s",
@@ -1891,29 +1932,35 @@ func kharej6() {
 		if err != nil {
 			log.Fatal(err)
 		}
-                resKharej()
+
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput()
 }
+
 func iran6() {
-    clearScreen()
+	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mIPV6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
 
+	var clientIP, portTunnel, portFEC, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -1923,8 +1970,8 @@ func iran6() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
@@ -1979,13 +2026,13 @@ func iran6() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m") 
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -2011,7 +2058,7 @@ func iran6() {
 				wireguardPort, clientIP, portTunnel, password, rawAzumi),
 		}
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
 		}
 
 		azumifecData := ServiceData{
@@ -2020,19 +2067,21 @@ func iran6() {
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i+1, err)
 		}
-                resIran()
-		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, portFEC)
+		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
+
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, portFEC)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 func UniMenu() {
 	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
@@ -2043,7 +2092,7 @@ func UniMenu() {
 
 	prompt := &survey.Select{
 		Message: "Enter your choice Please:",
-		Options: []string{"1. \033[92mUDP2RAW + FEC\033[0m", "2. \033[93mUDP2RAW + ICMP \033[0m", "3. \033[96mUDP2RAW + IP6IP6 \033[0m", "0. \033[94mBack to the main menu\033[0m"},
+		Options: []string{"1. \033[92mUDP2RAW/UDP2RAW FEC\033[0m", "2. \033[93mUDP2RAW + ICMP \033[0m", "3. \033[96mUDP2RAW + IP6IP6 \033[0m", "0. \033[94mBack to the main menu\033[0m"},
 	}
     
 	var choice string
@@ -2053,7 +2102,7 @@ func UniMenu() {
 	}
 
 	switch choice {
-	case "1. \033[92mUDP2RAW + FEC\033[0m":
+	case "1. \033[92mUDP2RAW/UDP2RAW FEC\033[0m":
 		uni1()
 	case "2. \033[93mUDP2RAW + ICMP \033[0m":
 		removeICMPSingle()
@@ -2816,22 +2865,25 @@ func kharejIcmp() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mICMP\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	if _, err := os.Stat("/root/icmptunnel"); os.IsNotExist(err) {
 		installICMP()
 	} else {
 		fmt.Println("\033[93mSkipping Icmp installation..\033[0m")
 	}
-	
-    startICKharej()
+
+	startICKharej()
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -2843,31 +2895,34 @@ func kharejIcmp() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter \033[92mFEC \033[93mPort: \033[0m")
 		portFEC, _ := reader.ReadString('\n')
-		portFEC = strings.TrimSpace(strings.TrimSuffix(portFEC, "\n"))
+		portFEC = strings.TrimSpace(portFEC)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -2881,7 +2936,6 @@ func kharejIcmp() {
 			return
 		}
 
-		
 		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l0.0.0.0:%s -r127.0.0.1:%s -k %s %s -a",
@@ -2892,7 +2946,6 @@ func kharejIcmp() {
 			log.Fatal(err)
 		}
 
-		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l0.0.0.0:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
@@ -2902,35 +2955,42 @@ func kharejIcmp() {
 		if err != nil {
 			log.Fatal(err)
 		}
-                resKharej()
+
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput()
 }
+
 func iranIcmp() {
-    clearScreen()
+	clearScreen()
 	fmt.Println("\033[92m ^ ^\033[0m")
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m IRAN \033[96mICMP\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	if _, err := os.Stat("/root/icmptunnel"); os.IsNotExist(err) {
 		installICMP()
 	} else {
 		fmt.Println("\033[93mSkipping Icmp installation..\033[0m")
 	}
+
 	startICIran()
-    fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var portTunnel, portFEC, password, wireguardPort, rawMode string
 
+	var portTunnel, portFEC, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -2940,8 +3000,8 @@ func iranIcmp() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
@@ -2986,13 +3046,13 @@ func iranIcmp() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")  
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -3018,7 +3078,7 @@ func iranIcmp() {
 				wireguardPort, portTunnel, password, rawAzumi),
 		}
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
 		}
 
 		azumifecData := ServiceData{
@@ -3027,19 +3087,21 @@ func iranIcmp() {
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i+1, err)
 		}
-                resIran()
-		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, portFEC)
+		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
+
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, portFEC)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 
 func addCronJob() {
 	filePath := "/etc/private.sh"
@@ -3580,12 +3642,14 @@ func kharejPri() {
 	fmt.Println("\033[92m(\033[91mO,O\033[92m)\033[0m")
 	fmt.Println("\033[92m(   ) \033[92m Kharej \033[96mIP6IP6\033[0m")
 	fmt.Println("\033[92m \"-\" \033[93m════════════════════════════════════\033[0m")
+
 	if _, err := os.Stat("/root/udp"); os.IsNotExist(err) {
 		downl("udp2raw")
 		downl("udpspeed")
 	} else {
 		fmt.Println("\033[93mSkipping download..\033[0m")
 	}
+
 	ipOutput, err := exec.Command("ip", "a").Output()
 	if err != nil {
 		fmt.Println("\033[91mCan't run 'ip a' cmd:\033[0m", err)
@@ -3601,6 +3665,7 @@ func kharejPri() {
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring kharej")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 	numConfigsInput, _ := reader.ReadString('\n')
@@ -3612,31 +3677,34 @@ func kharejPri() {
 	}
 
 	for i := 0; i < numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
+
 		fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
 		portTunnel, _ := reader.ReadString('\n')
-		portTunnel = strings.TrimSpace(strings.TrimSuffix(portTunnel, "\n"))
+		portTunnel = strings.TrimSpace(portTunnel)
 
 		fmt.Print("\033[93mEnter \033[92mFEC \033[93mPort: \033[0m")
 		portFEC, _ := reader.ReadString('\n')
-		portFEC = strings.TrimSpace(strings.TrimSuffix(portFEC, "\n"))
+		portFEC = strings.TrimSpace(portFEC)
 
 		fmt.Print("\033[93mEnter Password: \033[0m")
 		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(strings.TrimSuffix(password, "\n"))
+		password = strings.TrimSpace(password)
 
 		fmt.Print("\033[93mEnter \033[92mWireguard\033[93m Port:\033[0m ")
 		wireguardPort, _ := reader.ReadString('\n')
-		wireguardPort = strings.TrimSpace(strings.TrimSuffix(wireguardPort, "\n"))
-        fmt.Println("\033[93m─────────────────\033[0m")
+		wireguardPort = strings.TrimSpace(wireguardPort)
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
 		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")      
-		rawMode := userInput("Enter your choice: ")      
+		fmt.Println("3.\033[91m ICMP\033[0m")
+		rawMode := userInput("Enter your choice: ")
+
 		var rawAzumi string
 		switch rawMode {
 		case "1":
@@ -3650,7 +3718,6 @@ func kharejPri() {
 			return
 		}
 
-		
 		azumiudpData := ServiceData{
 			ServiceName: fmt.Sprintf("azumiudp_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udp2raw -s -l[::]:%s -r127.0.0.1:%s -k %s %s -a",
@@ -3661,7 +3728,6 @@ func kharejPri() {
 			log.Fatal(err)
 		}
 
-		
 		azumifecData := ServiceData{
 			ServiceName: fmt.Sprintf("azumifec_kharej%d", i+1),
 			Command: fmt.Sprintf("/root/udp/./udpspeed -s -l[::]:%s --mode 1 -r127.0.0.1:%s -f20:10 -k %s",
@@ -3671,11 +3737,14 @@ func kharejPri() {
 		if err != nil {
 			log.Fatal(err)
 		}
-                resKharej()
+
 		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		readInput()
 	}
+
+	resKharej()
+	readInput()
 }
+
 
 func iranPri() {
 	clearScreen()
@@ -3703,13 +3772,13 @@ func iranPri() {
 		fmt.Println("\033[91mazumi interface found. Skipping..\033[0m")
 	}
 
-	
-    fmt.Println("\033[93m───────────────────────────────────────\033[0m")
+	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
 	displayNotification("Configuring IRAN")
 	fmt.Println("\033[93m───────────────────────────────────────\033[0m")
-	var portTunnel, portFEC, password, wireguardPort, rawMode string
 
+	var portTunnel, portFEC, password, wireguardPort, rawMode string
 	var numConfigs int
+
 	for {
 		fmt.Print("\033[93mEnter the \033[92mNumber\033[93m of configs: \033[0m")
 		_, err := fmt.Scanln(&numConfigs)
@@ -3719,13 +3788,12 @@ func iranPri() {
 		fmt.Println("\033[91mInvalid input\033[0m")
 	}
 
-	for i := 0; i <= numConfigs; i++ {
-	    fmt.Println("\033[93m─────────────────\033[0m")
+	for i := 0; i < numConfigs; i++ {
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Printf("\033[92m    Config %d:\n\033[0m", i+1)
 		fmt.Println("\033[93m─────────────────\033[0m")
 
 		reader := bufio.NewReader(os.Stdin)
-
 
 		for {
 			fmt.Print("\033[93mEnter \033[92mTunnel\033[93m Port: \033[0m")
@@ -3766,13 +3834,13 @@ func iranPri() {
 			}
 			fmt.Println("\033[91mInvalid Input, Try again\033[0m")
 		}
-        fmt.Println("\033[93m─────────────────\033[0m")
+
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("\033[92mSelect raw mode:\033[0m")
-        fmt.Println("\033[93m─────────────────\033[0m")
-		
+		fmt.Println("\033[93m─────────────────\033[0m")
 		fmt.Println("1.\033[92m FakeTCP\033[0m")
 		fmt.Println("2. \033[96mUDP\033[0m")
-		fmt.Println("3.\033[91m ICMP\033[0m")  
+		fmt.Println("3.\033[91m ICMP\033[0m")
 
 		for {
 			rawMode = userInput("Enter your choice: ")
@@ -3798,7 +3866,7 @@ func iranPri() {
 				wireguardPort, portTunnel, password, rawAzumi),
 		}
 		if err := createService(azumiudpData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumiudp %d:\033[0m %v\n", i+1, err)
 		}
 
 		azumifecData := ServiceData{
@@ -3807,19 +3875,21 @@ func iranPri() {
 				portFEC, wireguardPort, password),
 		}
 		if err := createService(azumifecData); err != nil {
-			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i, err)
+			fmt.Printf("\033[91mFailed creating Azumifec %d:\033[0m %v\n", i+1, err)
 		}
-                resIran()
-		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
-		currentIPv4 := getIPv4()
 
-	
-	    if currentIPv4 != "" {
-		        displayAddress(currentIPv4, portFEC)
+		displayCheckmark(fmt.Sprintf("\033[92mConfig %d Service created successfully!\033[0m", i+1))
+
+		currentIPv4 := getIPv4()
+		if currentIPv4 != "" {
+			displayAddress(currentIPv4, portFEC)
+		}
 	}
-		readInput()
-	}
+
+	resIran()
+	readInput()
 }
+
 type ServiceData struct {
 	ServiceName string
 	Command     string
